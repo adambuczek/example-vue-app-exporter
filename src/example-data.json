@@ -1,0 +1,13 @@
+[
+  {
+    "id": "id-1",
+    "name": "test-component"
+  },
+  {
+    "id": "id-2",
+    "name": "p",
+    "data": {
+      "className": "paragraph"
+    }
+  }
+]

@@ -1,5 +1,8 @@
-const path = require('path');
-const webpack = require('webpack');
+const path = require('path')
+const webpack = require('webpack')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ProvidePlugin = webpack.ProvidePlugin
 
 const createConfiguration = (
     output,
@@ -11,7 +14,7 @@ const createConfiguration = (
     output: {
         path: output,
         filename: 'index.js',
-        libraryTarger: 'umd'
+        libraryTarget: 'umd'
     },
     resolve: {
         alias: {
@@ -19,6 +22,9 @@ const createConfiguration = (
         },
         modules: ['node_modules'],
         extensions: ['.js', '.vue', '.json', '.css']
+    },
+    externals: {
+        vue: 'Vue'
     },
     module: {
         rules: [
@@ -34,7 +40,7 @@ const createConfiguration = (
                 test: /\.css/,
                 use: [
                     {
-                        loader: 'babel-loader',
+                        loader: 'style-loader',
                         options: {
                             injectType: 'singletonStyleTag',
                             insert: '[data-style-root]'
@@ -44,5 +50,20 @@ const createConfiguration = (
                 ]
             }
         ]
-    }
+    },
+    plugins: [
+        new ProvidePlugin({ __injected: dataPath }),
+        new VueLoaderPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, 'src', 'template.html'),
+            minify: {
+                collapseWhitespace: false,
+                removeComments: false
+            },
+            hash: true
+        })
+    ]
 })
+
+module.exports = createConfiguration
+
